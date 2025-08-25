@@ -1,0 +1,25 @@
+const localHelper = require('../helpers/localPricelistHelpers');
+const sharepointHelper = require('../helpers/sharepointHelper');
+const fs = require('fs');
+const path = require('path');
+
+exports.getPricelist = async () => {
+
+    try {
+        // Spróbuj pobrać plik z SharePoint
+        const data = await sharepointHelper.fetchPricelistFromSharePoint();
+
+        if (data) {
+            // Zapisz plik na serwerze
+            const filePath = path.resolve(__dirname, '..', 'data', 'cennik.xlsx');
+            fs.writeFileSync(filePath, Buffer.from(data));
+            return localHelper.loadLocalPricelist();
+        }
+
+        // Jeśli brak danych z SharePoint, użyj ostanio zapisanego lokalnego pliku
+        return localHelper.loadLocalPricelist();
+
+    } catch (err) {
+        console.error('Error in getPricelist:', err.message);
+    }
+}
