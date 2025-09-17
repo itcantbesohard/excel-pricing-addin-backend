@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export async function fetchPricelistFromSharePoint() {
+export async function fetchPricelistFromSharePoint(fileName) {
   try {
     const token = await getSharePointAccessToken();
-    const file = await getFileFromSharePoint(token);
+    const file = await getFileFromSharePoint(token, fileName);
     return file;
   } catch (err) {
     console.error("Error in fetchPricelistFromSharePoint:", err);
@@ -38,8 +38,10 @@ async function getSharePointAccessToken() {
   return data.access_token;
 }
 
-async function getFileFromSharePoint(token) {
-  const resp = await fetch(process.env.FILE_URL, {
+async function getFileFromSharePoint(token, fileName) {
+
+  const fileUrl = process.env.FILE_URL.replace("fileName", fileName);
+  const resp = await fetch(fileUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

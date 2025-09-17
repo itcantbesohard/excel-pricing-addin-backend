@@ -1,9 +1,8 @@
-const aiService = require('../services/aiService');
+import { sendPromptToGemini, sendPromptToOpenRouter } from '../services/aiService.js';
 
-
-exports.handleAI = async (req, res, next) => {
+export async function handleAI(req, res, next){
   try {
-    const rawData = await aiService.sendPromptToGemini(
+    const rawData = await sendPromptToGemini(
       req.body.promptUser,
       req.body.promptSystem,
       req.body.model

@@ -1,19 +1,18 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-
-const aiController = require('../controllers/aiController');
-const pricelistController = require('../controllers/pricelistController');
-const authMiddleware = require('../middleware/authMiddleware');
+import { handleAI } from '../controllers/aiController.js';
+import { handlePricelist } from '../controllers/pricelistController.js';
+import requireAuth  from '../middleware/authMiddleware.js';
 
 // AI endpoint
-router.post('/ai',authMiddleware, aiController.handleAI);
+router.post('/ai',requireAuth, handleAI);
 
 // Pricelist endpoint
-router.get('/pricelist', authMiddleware, pricelistController.getPricelist);
+router.get('/pricelist/:pricelistName', requireAuth, handlePricelist);
 
 //PING
 router.get('/ping', (req, res) => {
   res.json({ message: 'pong' });
 });
 
-module.exports = router;
+export default router;

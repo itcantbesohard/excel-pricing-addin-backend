@@ -1,8 +1,8 @@
-const pricelistService = require('../services/pricelistService');
+import {getPricelist} from '../services/pricelistService.js'
 
-exports.getPricelist = async (req, res, next) => {
+export async function handlePricelist(req, res, next) {
   try {
-    const data = await pricelistService.getPricelist();
+    const data = await getPricelist(req.params.pricelistName);
     res.json(data);
   } catch (err) {
     console.error('Error in controller:', err);
